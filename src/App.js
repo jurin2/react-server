@@ -1,27 +1,11 @@
 import './App.css';
-import { useState } from 'react';
-import srcDate from './srcDate';
+import { useState, useEffect } from 'react';
+import srcData from './srcData';
 import { Button, Card } from 'react-bootstrap';
-import { Switch, Route, Link, useParams } from "react-router-dom";
+import { Switch, Route, Link, useParams, useHistory } from "react-router-dom";
+import SecContainer from './SecContainer';
+import axios from 'axios';
 
-
-function SecContainer(props){
-  return(
-    <div className="container">
-      {
-        props.wear.map((item,idx,arr)=>{
-          return(
-            <div key={item.id} className="card">
-              <h2>{item.title}</h2>
-              <p>{item.content}</p>
-              <p>{item.price}</p>
-            </div>
-          );
-        })
-      }
-    </div>
-  );
-}
 
 function Footer(props){
   return(
@@ -38,14 +22,41 @@ function Input(props){
 }
 
 function Detail(props){
-  let par = useParams();
+  let {num} = useParams();
+  let history = useHistory();
+  let [box,setBox] = useState(true);
+  useEffect(()=>{
+    setTimeout(()=>{setBox(false)},2000);
+  });
+
   return(
-    <h1>{`파람스는${par}이다`}</h1> 
+    <div>
+      <h1>{props.wear[num-1].title}</h1>
+      {
+        box ? <p>재고가 얼마 없습니다</p> : null
+      }
+      <p>{props.wear[num-1].content}</p>
+      <p>{props.wear[num-1].price}</p>
+      <button onClick={()=>{
+        history.go(-1)
+      }}>뒤로가기</button>
+    </div>
   );
 }
 
+function fnGetData(wear,setWear){
+  const axios = require('axios');
+  axios.get('https://jurin2.github.io/react-server/serverDate.json')
+  .then((respons)=>{
+    setWear([...wear,...respons.data]);
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+}
+
 function App() {
-  let [wear,setWear] = useState(srcDate);
+  let [wear,setWear] = useState(srcData);
   return (
     <div className="App">     
       <Link to="/">홈으로</Link>
@@ -53,11 +64,15 @@ function App() {
       <Link to="/sec2">sec2으로</Link>
       
       <Switch>
+        <Route path="/sec1/:num">
+          <Detail wear={wear} setWear={setWear}/>      
+        </Route>  
         <Route path="/sec1">
           <section>
             <Input onChange={(e)=>{console.log(e.target.value)}}/>
             <button>버튼</button>
             <SecContainer wear={wear} setWear={setWear}/>
+            <button onClick={()=>{fnGetData(wear,setWear)}}>3개더</button>
           </section>
         </Route>      
         <Route path="/sec2">
@@ -81,11 +96,6 @@ function App() {
           </header>
         </Route>
       </Switch>
-
-      <Route path="/sec1/:param">
-        <Detail/>      
-      </Route>  
-
     <Footer/> 
     </div>
   );

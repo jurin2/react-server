@@ -1,0 +1,20 @@
+export default [
+    {
+        id:1, 
+        title:'바지',
+        content:'바지사세요', 
+        price:'10000원'
+    },
+    {
+        id:2,
+        title:'치마', 
+        content:'치마사세요', 
+        price:'15000원'
+    },
+    {
+        id:3, 
+        title:'와이셔츠', 
+        content:'와이셔츠사세요', 
+        price:'20000원'
+    }
+]
