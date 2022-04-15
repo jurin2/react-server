@@ -2,7 +2,7 @@ import './App.css';
 import { useState } from 'react';
 import srcDate from './srcDate';
 import { Button, Card } from 'react-bootstrap';
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, useParams } from "react-router-dom";
 
 
 function SecContainer(props){
@@ -34,6 +34,13 @@ function Footer(props){
 function Input(props){
   return(
     <input type="text" onChange={(e)=>{props.onChange(e)}}/>
+  );
+}
+
+function Detail(props){
+  let par = useParams();
+  return(
+    <h1>{`파람스는${par}이다`}</h1> 
   );
 }
 
@@ -76,7 +83,7 @@ function App() {
       </Switch>
 
       <Route path="/sec1/:param">
-        <h1>{`파람스는${param}이다`}</h1> 
+        <Detail/>      
       </Route>  
 
     <Footer/> 
