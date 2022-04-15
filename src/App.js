@@ -75,6 +75,10 @@ function App() {
         </Route>
       </Switch>
 
+      <Route path="/sec1/:param">
+        <h1>{`파람스는${param}이다`}</h1> 
+      </Route>  
+
     <Footer/> 
     </div>
   );
